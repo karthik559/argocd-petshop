@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: petshop
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: 'https://git.emea.zf-world.com/zf-product-templates/argocd/petshop_argocd.git'
+    path: 'openshift-manifests'
+    targetRevision: HEAD
+    insecureSkipTLSVerify: true  # Ensure this is properly indented under 'source'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: petshop
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
