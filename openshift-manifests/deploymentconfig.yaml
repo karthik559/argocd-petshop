@@ -1,0 +1,30 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: petshop
+  labels:
+    app: petshop
+spec:
+  replicas: 1
+  selector:
+    app: petshop
+  template:
+    metadata:
+      labels:
+        app: petshop
+    spec:
+      containers:
+      - name: petshop
+        image: my-petshop-image:latest
+        ports:
+        - containerPort: 8080
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - petshop
+        from:
+          kind: ImageStreamTag
+          name: 'my-petshop-image:latest'
